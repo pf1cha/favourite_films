@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 import sys
 
-load_dotenv()
+load_dotenv(dotenv_path='backend/config.env')
 
 OMDB_API_KEY = os.getenv("OMDB_API_KEY")
 DB_NAME = os.getenv("DB_NAME")

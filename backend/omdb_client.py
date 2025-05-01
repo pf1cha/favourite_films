@@ -1,4 +1,3 @@
-# backend/omdb_client.py
 import requests
 from backend.config import OMDB_API_KEY
 import sys
@@ -51,6 +50,7 @@ def get_movie_by_id(imdb_id):
         data = response.json()
 
         if data.get("Response") == "True":
+            print(data)
             return data # Возвращает словарь с деталями
         else:
             print(f"OMDb API Error: {data.get('Error')}", file=sys.stderr)
