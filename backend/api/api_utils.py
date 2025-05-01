@@ -16,7 +16,7 @@ def transform_ratings(ratings_list):
 
 
 def get_movie_info(title):
-    api_key = 'api_key_here'
+    api_key = 'a913f34d'
     url = f'http://www.omdbapi.com/?apikey={api_key}&t={title}&plot=full'
     try:
         response = requests.get(url)
