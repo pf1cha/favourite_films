@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     DB_HOST: str = Field()
     DB_PORT: str = Field()
 
-    model_config = SettingsConfigDict(env_file="backend/config.env")
+    model_config = SettingsConfigDict(env_file="config.env")
 
 
 settings = Settings()
