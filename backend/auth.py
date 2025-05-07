@@ -9,8 +9,6 @@ from backend.database import get_session
 from backend.models.user import User
 
 
-# hash_password и verify_password остаются без изменений
-
 def hash_password(password: str) -> bytes:
     password_bytes = password.encode('utf-8')
     salt = bcrypt.gensalt()
@@ -31,20 +29,17 @@ def verify_password(plain_password: str, hashed_password_str: str) -> bool:
         return False
 
 
-# register_user остается без изменений
-
 def register_user(username: str, password: str) -> tuple[bool, str]:
     if not username or not password:
         return False, "Имя пользователя и пароль не могут быть пустыми."
     if len(password) < 6:
         return False, "Пароль должен быть не менее 6 символов."
-
     session = get_session()
     hashed_pw = hash_password(password)
     hashed_pw_str = hashed_pw.decode('utf-8')
-
     try:
         session.add(User(username=username, password_hash=hashed_pw_str))
+        session.commit()
         return True, "Пользователь успешно зарегистрирован."
     except sqlalchemy.exc.IntegrityError:
         session.rollback()
@@ -69,16 +64,14 @@ def login_user(username: str, password: str) -> tuple[bool, str, int | None]:
 
     session = get_session()
 
-    user_id = None  # Инициализируем user_id
     try:
         user = session.execute(select(User).where(User.username == username)).scalar_one_or_none()
 
         if user is None:
             return False, "Пользователь не найден.", None
 
-
         if verify_password(password, user.password_hash):
-            return True, "Вход выполнен успешно.", user_id  # Возвращаем user_id
+            return True, "Вход выполнен успешно.", user.id  # Возвращаем user_id
         else:
             return False, "Неверный пароль.", None
 
