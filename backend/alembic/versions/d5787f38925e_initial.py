@@ -25,7 +25,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('username', sa.Text(), nullable=True),
     sa.Column('password_hash', sa.Text(), nullable=True),
-    sa.Column('created_at', sa.DATETIME(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     schema='public'
     )
@@ -35,7 +35,7 @@ def upgrade() -> None:
     sa.Column('year', sa.Integer(), nullable=True),
     sa.Column('type_', sa.Text(), nullable=True),
     sa.Column('poster_url', sa.Text(), nullable=True),
-    sa.Column('added_at', sa.DATETIME(), nullable=True),
+    sa.Column('added_at', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('imdb_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['public.users.id'], ),
