@@ -21,11 +21,11 @@ class MovieAppWindow(QMainWindow):
 
         self.search_tab = SearchTab(self.user_id)
         self.favorites_tab = FavoritesTab(self.user_id)
-        # self.my_reviews_tab = MyReviewsTab(self.user_id)
+        self.my_reviews_tab = MyReviewsTab(self.user_id)
 
         self.tab_widget.addTab(self.search_tab, "Поиск фильмов")
         self.tab_widget.addTab(self.favorites_tab, "Избранное")
-        # self.tab_widget.addTab(self.my_reviews_tab, "Мои отзывы")
+        self.tab_widget.addTab(self.my_reviews_tab, "Мои отзывы")
 
         self.favorites_tab.favorite_removed_signal.connect(self.handle_favorite_removed)
 

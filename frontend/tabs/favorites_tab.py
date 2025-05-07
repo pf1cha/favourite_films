@@ -42,7 +42,6 @@ class FavoritesTab(QWidget):
         self.status_label = QLabel("")
         layout.addWidget(self.status_label)
 
-        # Connections
         self.remove_favorite_button.clicked.connect(self.remove_selected_favorite)
         self.leave_review_button.clicked.connect(self.leave_review_for_selected_favorite)
         self.favorites_list.itemSelectionChanged.connect(self.update_action_buttons_state)
@@ -57,10 +56,10 @@ class FavoritesTab(QWidget):
         if not favorites:
             self.status_label.setText("Список избранного пуст.")
         else:
-            for fav_film in favorites:  # fav_film is a FavouriteFilm object
+            for fav_film in favorites:
                 item_text = f"{fav_film.title} ({fav_film.year or 'N/A'}) - {fav_film.type_ or 'N/A'}"
                 list_item = QListWidgetItem(item_text)
-                list_item.setData(Qt.ItemDataRole.UserRole, fav_film)  # Store the FavouriteFilm object
+                list_item.setData(Qt.ItemDataRole.UserRole, fav_film)
                 self.favorites_list.addItem(list_item)
             self.status_label.setText(f"Загружено: {len(favorites)} фильмов.")
         self.update_action_buttons_state()
