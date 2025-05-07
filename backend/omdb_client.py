@@ -1,8 +1,9 @@
 import requests
-from backend.config import OMDB_API_KEY
+from config import settings
 import sys
 
 BASE_URL = "http://www.omdbapi.com/"
+OMDB_API_KEY = settings.OMDB_API_KEY
 
 def search_movie_by_title(title):
     """Ищет фильмы/сериалы по названию."""
