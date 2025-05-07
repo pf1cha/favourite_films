@@ -45,6 +45,7 @@ def register_user(username: str, password: str) -> tuple[bool, str]:
 
     try:
         session.add(User(username=username, password_hash=hashed_pw_str))
+        session.commit()
         return True, "Пользователь успешно зарегистрирован."
     except sqlalchemy.exc.IntegrityError:
         session.rollback()
