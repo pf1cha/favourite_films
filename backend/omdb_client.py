@@ -1,9 +1,10 @@
 import requests
-from backend.config import OMDB_API_KEY
+from config import settings
 import sys
 import time
 
 BASE_URL = "http://www.omdbapi.com/"
+OMDB_API_KEY = settings.OMDB_API_KEY
 
 
 def get_movie_by_id(imdb_id):

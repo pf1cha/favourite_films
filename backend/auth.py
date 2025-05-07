@@ -1,8 +1,12 @@
 # backend/auth.py
 import bcrypt
-import psycopg2
-from backend.database import get_db_connection  # Используем общую функцию
 import sys
+
+import sqlalchemy.exc
+from sqlalchemy import select
+
+from backend.database import get_session
+from backend.models.user import User
 
 
 # hash_password и verify_password остаются без изменений
@@ -35,35 +39,23 @@ def register_user(username: str, password: str) -> tuple[bool, str]:
     if len(password) < 6:
         return False, "Пароль должен быть не менее 6 символов."
 
-    conn = get_db_connection()
-    if not conn:
-        return False, "Ошибка подключения к базе данных."
+    session = get_session()
+    hashed_pw = hash_password(password)
+    hashed_pw_str = hashed_pw.decode('utf-8')
 
     try:
-        hashed_pw = hash_password(password)
-        hashed_pw_str = hashed_pw.decode('utf-8')
-
-        with conn.cursor() as cur:
-            cur.execute(
-                "INSERT INTO users (username, password_hash) VALUES (%s, %s)",
-                (username, hashed_pw_str)
-            )
-            conn.commit()
+        session.add(User(username=username, password_hash=hashed_pw_str))
         return True, "Пользователь успешно зарегистрирован."
-
-    except psycopg2.errors.UniqueViolation:
-        conn.rollback()
+    except sqlalchemy.exc.IntegrityError:
+        session.rollback()
         return False, "Пользователь с таким именем уже существует."
-    except psycopg2.Error as e:
-        conn.rollback()
+    except sqlalchemy.exc.DatabaseError as e:
+        session.rollback()
         print(f"Ошибка БД при регистрации пользователя {username}: {e}", file=sys.stderr)
         return False, "Произошла ошибка базы данных при регистрации."
     except Exception as e:
         print(f"Неожиданная ошибка при регистрации {username}: {e}", file=sys.stderr)
         return False, "Произошла непредвиденная ошибка."
-    finally:
-        if conn:
-            conn.close()
 
 
 # --- ИЗМЕНЕНО: login_user ---
@@ -75,36 +67,21 @@ def login_user(username: str, password: str) -> tuple[bool, str, int | None]:
     if not username or not password:
         return False, "Введите имя пользователя и пароль.", None
 
-    conn = get_db_connection()
-    if not conn:
-        return False, "Ошибка подключения к базе данных.", None
+    session = get_session()
 
     user_id = None  # Инициализируем user_id
     try:
-        with conn.cursor() as cur:
-            # Получаем и user_id, и хеш пароля
-            cur.execute(
-                "SELECT user_id, password_hash FROM users WHERE username = %s",
-                (username,)
-            )
-            result = cur.fetchone()
+        user = session.execute(select(User).where(User.username == username)).scalar_one_or_none()
 
-        if result is None:
+        if user is None:
             return False, "Пользователь не найден.", None
 
-        user_id, stored_hash_str = result  # Распаковываем результат
 
-        if verify_password(password, stored_hash_str):
+        if verify_password(password, user.password_hash):
             return True, "Вход выполнен успешно.", user_id  # Возвращаем user_id
         else:
             return False, "Неверный пароль.", None
 
-    except psycopg2.Error as e:
-        print(f"Ошибка БД при входе пользователя {username}: {e}", file=sys.stderr)
-        return False, "Произошла ошибка базы данных при входе.", None
     except Exception as e:
         print(f"Неожиданная ошибка при входе {username}: {e}", file=sys.stderr)
         return False, "Произошла непредвиденная ошибка.", None
-    finally:
-        if conn:
-            conn.close()
