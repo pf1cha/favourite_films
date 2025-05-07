@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, DATETIME, ForeignKey
+from sqlalchemy import Column, Integer, DATETIME, ForeignKey, DateTime
 from sqlalchemy.orm import Relationship, relationship
 from sqlalchemy.types import Text, Boolean
 from .base import Base
@@ -13,7 +13,7 @@ class FavouriteFilm(Base):
     year = Column(Integer)
     type_ = Column(Text)
     poster_url = Column(Text)
-    added_at = Column(DATETIME, default=datetime.now())
+    added_at = Column(DateTime, default=datetime.now())
 
     user_id = Column(ForeignKey("public.users.id"))
     user = relationship("User")
