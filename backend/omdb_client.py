@@ -1,5 +1,5 @@
 import requests
-from backend.config import settings
+from config import settings
 import sys
 
 BASE_URL = "http://www.omdbapi.com/"

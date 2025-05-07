@@ -1,9 +1,5 @@
-import psycopg2
-from requests import session
-from sqlalchemy.testing.config import db_url
-
 from backend.models.favourite_film import FavouriteFilm
-from backend.config import settings
+from config import settings
 import sys
 from sqlalchemy import create_engine, Engine, select, delete
 from sqlalchemy.orm import Session, sessionmaker

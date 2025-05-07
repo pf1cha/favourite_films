@@ -1,7 +1,5 @@
 # backend/auth.py
 import bcrypt
-import psycopg2
-# from backend.database import get_db_connection  # Используем общую функцию
 import sys
 
 import sqlalchemy.exc
