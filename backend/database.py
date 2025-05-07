@@ -1,5 +1,5 @@
 from backend.models.favourite_film import FavouriteFilm
-from config import settings
+from backend.config import settings
 import sys
 from sqlalchemy import create_engine, Engine, select, delete
 from sqlalchemy.orm import Session, sessionmaker
