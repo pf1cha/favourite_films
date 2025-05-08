@@ -9,6 +9,7 @@ from backend.database import sqlalchemy_uri
 from backend.models.base import Base
 from backend.models.user import User
 from backend.models.favourite_film import FavouriteFilm
+from backend.models.review import Review
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
