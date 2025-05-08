@@ -238,8 +238,6 @@ class LoginWindow(QDialog):
         if success and user_id is not None:
             self.login_successful.emit(user_id)
             self.accept()
-        else:
-            QMessageBox.warning(self, "Ошибка входа", message)
 
     def attempt_register(self):
         username = self.username_reg_input.text()
@@ -272,8 +270,6 @@ class LoginWindow(QDialog):
             self.tab_widget.setCurrentIndex(0)
             self.login_tab_btn.setChecked(True)
             self.register_tab_btn.setChecked(False)
-        else:
-            QMessageBox.warning(self, "Ошибка регистрации", message)
 
     def switch_to_login(self):
         """Переключение на вкладку входа с обновлением состояния кнопок"""
