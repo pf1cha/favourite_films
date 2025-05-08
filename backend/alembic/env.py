@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from backend.database import sqlalchemy_uri
+from backend.database.database import sqlalchemy_uri
 from backend.models.base import Base
 from backend.models.user import User
 from backend.models.favourite_film import FavouriteFilm
