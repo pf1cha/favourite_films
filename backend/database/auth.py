@@ -1,4 +1,3 @@
-# backend/auth.py
 import bcrypt
 import sys
 
@@ -37,13 +36,16 @@ def register_user(username: str, password: str) -> tuple[bool, str]:
     session = get_session()
     hashed_pw = hash_password(password)
     hashed_pw_str = hashed_pw.decode('utf-8')
+
+    # Проверка на повторение юзернейма
+    user = session.execute(select(User).where(User.username==username)).scalar_one_or_none()
+    if user:
+        return False, "Пользователь с таким именем уже существует."
+
     try:
         session.add(User(username=username, password_hash=hashed_pw_str))
         session.commit()
         return True, "Пользователь успешно зарегистрирован."
-    except sqlalchemy.exc.IntegrityError:
-        session.rollback()
-        return False, "Пользователь с таким именем уже существует."
     except sqlalchemy.exc.DatabaseError as e:
         session.rollback()
         print(f"Ошибка БД при регистрации пользователя {username}: {e}", file=sys.stderr)

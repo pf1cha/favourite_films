@@ -1,4 +1,3 @@
-# frontend/ui_utils.py
 from PyQt6.QtWidgets import QMessageBox
 
 
