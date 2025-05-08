@@ -10,11 +10,11 @@ class FavouriteFilm(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(Text)
-    year = Column(Integer)
+    year = Column(Text) # Column(Integer)
+    imdb_id = Column(Text) # Column(Integer)
     type_ = Column(Text)
     poster_url = Column(Text)
     added_at = Column(DateTime, default=datetime.now())
 
     user_id = Column(ForeignKey("public.users.id"))
     user = relationship("User")
-    imdb_id = Column(Integer)

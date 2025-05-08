@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QListWidget,
                              QLabel, QListWidgetItem, QHBoxLayout)
 from PyQt6.QtCore import Qt
-from backend.review_service import get_reviews_by_user
+from backend.database.review_service import get_reviews_by_user
 from backend.models.review import Review  # For type hinting
 from frontend.review_dialog import ReviewDialog  # To potentially edit a review
 from frontend.ui_utils import show_warning_message

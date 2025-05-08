@@ -1,5 +1,5 @@
 import requests
-from backend.config import settings
+from backend.config.config import settings
 import sys
 import time
 
