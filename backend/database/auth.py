@@ -5,7 +5,7 @@ import sys
 import sqlalchemy.exc
 from sqlalchemy import select
 
-from backend.database import get_session
+from backend.database.database import get_session
 from backend.models.user import User
 
 
@@ -53,7 +53,6 @@ def register_user(username: str, password: str) -> tuple[bool, str]:
         return False, "Произошла непредвиденная ошибка."
 
 
-# --- ИЗМЕНЕНО: login_user ---
 def login_user(username: str, password: str) -> tuple[bool, str, int | None]:
     """
     Проверяет учетные данные пользователя.

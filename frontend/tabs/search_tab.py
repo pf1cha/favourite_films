@@ -1,10 +1,11 @@
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLineEdit,
-                             QPushButton, QListWidget, QLabel, QMessageBox, QListWidgetItem)
+                             QPushButton, QListWidget, QLabel, QListWidgetItem)
 from PyQt6.QtCore import Qt
-from backend.omdb_client import search_movie_by_title
-from backend.database import add_favorite
-from frontend.review_dialog import ReviewDialog  # Import ReviewDialog
+from backend.api.omdb_client import search_movie_by_title
+from backend.database.database import add_favorite
+from frontend.review_dialog import ReviewDialog
 from frontend.ui_utils import show_error_message, show_info_message, show_warning_message
+from backend.models.favourite_film import FavouriteFilm
 
 
 class SearchTab(QWidget):
@@ -101,11 +102,19 @@ class SearchTab(QWidget):
 
     def add_selected_to_favorites(self):
         movie_data = self.get_selected_movie_data()
+        print(f"Selected movie data: {movie_data}")
         if not movie_data:
             show_warning_message(self, "Избранное", "Фильм не выбран.")
             return
-        print("I'm here")
-        success, message = add_favorite(movie_data)
+        new_favorite_movie = FavouriteFilm(
+            title=movie_data.get('Title'),
+            year=movie_data.get('Year'),
+            type_=movie_data.get('Type'),
+            imdb_id=movie_data.get('imdbID'),
+            poster_url=movie_data.get('Poster'),
+            user_id=self.user_id
+        )
+        success, message = add_favorite(new_favorite_movie)
         print(f"Adding to favorites: {success}, {message}")
         if success:
             show_info_message(self, "Избранное", message)

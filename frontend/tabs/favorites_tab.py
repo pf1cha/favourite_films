@@ -2,7 +2,7 @@
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QListWidget,
                              QLabel, QMessageBox, QListWidgetItem, QHBoxLayout)
 from PyQt6.QtCore import Qt, pyqtSignal
-from backend.database import get_all_favorites_by_user_id, remove_favorite
+from backend.database.database import get_all_favorites_by_user_id, remove_favorite
 from backend.models.favourite_film import FavouriteFilm  # For type hinting
 from frontend.review_dialog import ReviewDialog
 from frontend.ui_utils import show_error_message, show_info_message, show_warning_message
@@ -98,7 +98,6 @@ class FavoritesTab(QWidget):
         if not selected_film:
             show_warning_message(self, "Отзыв", "Фильм не выбран.")
             return
-
         dialog = ReviewDialog(self.user_id, selected_film.imdb_id, selected_film.title, self)
         # dialog.review_submitted.connect(self.handle_review_submission)
         dialog.exec()

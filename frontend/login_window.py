@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QLineEdit, QPushButton,
                              QLabel, QMessageBox, QFormLayout, QDialogButtonBox)
 from PyQt6.QtCore import pyqtSignal, Qt
-from backend.auth import login_user, register_user
+from backend.database.auth import login_user, register_user
 
 
 class LoginWindow(QDialog):

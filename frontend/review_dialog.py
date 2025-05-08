@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QLabel, QComboBox, QTextEdit,
-                             QPushButton, QDialogButtonBox, QFormLayout, QMessageBox)
+                             QDialogButtonBox, QFormLayout, QMessageBox)
 from PyQt6.QtCore import pyqtSignal
-from backend.review_service import add_review, get_review_by_user_and_movie
+from backend.database.review_service import add_review, get_review_by_user_and_movie
 
 
 class ReviewDialog(QDialog):
