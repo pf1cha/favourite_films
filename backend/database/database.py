@@ -46,7 +46,7 @@ def remove_favorite(user_id: int, imdb_id: str) -> bool:
     session = get_session()
     try:
         session.execute(delete(FavouriteFilm)
-                        .where(FavouriteFilm.user_id == user_id and FavouriteFilm.imdb_id == imdb_id))
+                        .where(FavouriteFilm.user_id == user_id, FavouriteFilm.imdb_id == imdb_id))
         session.commit()
         return True
     except Exception as e:
