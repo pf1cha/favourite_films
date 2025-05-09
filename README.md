@@ -303,4 +303,6 @@
 
 ## Пример работы приложения
 
+![Image alt](https://github.com/pf1cha/favourite_films/raw/main/report/auth.png)
+
 ## Установка и запуск
