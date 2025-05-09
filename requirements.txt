@@ -1,5 +1,5 @@
 requests==2.32.3
-psycopg2==2.9.10
+psycopg2-binary==2.9.10
 dotenv==0.9.9
 python-dotenv==1.1.0
 PyQt6==6.7.1
@@ -8,3 +8,4 @@ SQLAlchemy~=2.0.40
 alembic~=1.15.2
 pydantic~=2.11.4
 pydantic-settings~=2.9.1
+pytest~=8.3.5
