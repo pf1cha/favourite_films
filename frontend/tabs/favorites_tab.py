@@ -217,9 +217,15 @@ class FavoritesTab(QWidget):
         if confirm == QMessageBox.StandardButton.Yes:
             success = remove_favorite(self.user_id, selected_film.imdb_id)
             if success:
+                for i in range(self.favorites_list.count()):
+                    item = self.favorites_list.item(i)
+                    if item.data(Qt.ItemDataRole.UserRole).imdb_id == selected_film.imdb_id:
+                        self.favorites_list.takeItem(i)
+                        break
+
                 show_info_message(self, "Успешно", f"Фильм '{selected_film.title}' удален из избранного.")
                 self.favorite_removed_signal.emit(selected_film.imdb_id)
-                self.load_favorites()
+                self.update_action_buttons_state()
             else:
                 show_error_message(self, "Ошибка", "Не удалось удалить фильм из избранного.")
 
