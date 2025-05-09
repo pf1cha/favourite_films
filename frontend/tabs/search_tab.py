@@ -2,7 +2,8 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLineEdit,
                              QPushButton, QListWidget, QLabel, QListWidgetItem,
                              QFrame)
 from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QFont, QColor
+from PyQt6.QtGui import QFont, QColor, QImage, QPixmap
+import requests
 from backend.api.omdb_client import search_movie_by_title
 from backend.database.database import add_favorite
 from frontend.review_dialog import ReviewDialog
@@ -176,12 +177,37 @@ class SearchTab(QWidget):
             for movie in movies:
                 item = QListWidgetItem()
                 item.setData(Qt.ItemDataRole.UserRole, movie)
-                item.setSizeHint(QSize(0, 100))
+                item.setSizeHint(QSize(0, 180))
 
                 widget = QWidget()
-                widget_layout = QVBoxLayout(widget)
+                widget_layout = QHBoxLayout(widget)
                 widget_layout.setContentsMargins(10, 5, 10, 5)
-                widget_layout.setSpacing(5)
+                widget_layout.setSpacing(10)
+
+                poster_url = movie.get('Poster')
+                if poster_url and poster_url != 'N/A':
+                    try:
+                        response = requests.get(poster_url, timeout=10)
+                        if response.status_code == 200:
+                            image = QImage()
+                            image.loadFromData(response.content)
+
+                            scaled_image = image.scaled(120, 160,
+                                                        Qt.AspectRatioMode.KeepAspectRatio,
+                                                        Qt.TransformationMode.SmoothTransformation)
+
+                            poster_label = QLabel()
+                            poster_label.setPixmap(QPixmap.fromImage(scaled_image))
+                            poster_label.setFixedSize(120, 160)
+                            poster_label.setStyleSheet("border: 1px solid #ddd;")
+                            widget_layout.addWidget(poster_label)
+                    except Exception as e:
+                        print(f"Ошибка загрузки постера: {e}")
+
+                info_widget = QWidget()
+                info_layout = QVBoxLayout(info_widget)
+                info_layout.setContentsMargins(0, 0, 0, 0)
+                info_layout.setSpacing(5)
 
                 title_layout = QHBoxLayout()
 
@@ -209,7 +235,7 @@ class SearchTab(QWidget):
                     """)
                     title_layout.addWidget(type_label)
 
-                widget_layout.addLayout(title_layout)
+                info_layout.addLayout(title_layout)
 
                 if movie.get('imdbID'):
                     imdb_layout = QHBoxLayout()
@@ -217,12 +243,23 @@ class SearchTab(QWidget):
                     imdb_label.setStyleSheet("color: #555;")
                     imdb_layout.addWidget(imdb_label)
                     imdb_layout.addStretch()
-                    widget_layout.addLayout(imdb_layout)
+                    info_layout.addLayout(imdb_layout)
+
+                if movie.get('imdbRating') and movie.get('imdbRating') != 'N/A':
+                    rating_layout = QHBoxLayout()
+                    rating_label = QLabel(f"Рейтинг: {movie.get('imdbRating')}")
+                    rating_label.setStyleSheet("color: #ffc107; font-weight: bold;")
+                    rating_layout.addWidget(rating_label)
+                    rating_layout.addStretch()
+                    info_layout.addLayout(rating_layout)
 
                 separator = QFrame()
                 separator.setFrameShape(QFrame.Shape.HLine)
                 separator.setStyleSheet(f"color: {self.border_color.name()};")
-                widget_layout.addWidget(separator)
+                info_layout.addWidget(separator)
+
+                widget_layout.addWidget(info_widget)
+                widget_layout.setStretchFactor(info_widget, 1)
 
                 self.results_list.addItem(item)
                 self.results_list.setItemWidget(item, widget)
