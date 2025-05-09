@@ -177,7 +177,7 @@ class SearchTab(QWidget):
             for movie in movies:
                 item = QListWidgetItem()
                 item.setData(Qt.ItemDataRole.UserRole, movie)
-                item.setSizeHint(QSize(0, 180))
+                item.setSizeHint(QSize(0, 250))
 
                 widget = QWidget()
                 widget_layout = QHBoxLayout(widget)
@@ -210,7 +210,6 @@ class SearchTab(QWidget):
                 info_layout.setSpacing(5)
 
                 title_layout = QHBoxLayout()
-
                 title_label = QLabel(movie.get('Title', 'Нет названия'))
                 title_font = QFont()
                 title_font.setBold(True)
@@ -237,21 +236,38 @@ class SearchTab(QWidget):
 
                 info_layout.addLayout(title_layout)
 
-                if movie.get('imdbID'):
-                    imdb_layout = QHBoxLayout()
-                    imdb_label = QLabel(f"IMDb: {movie.get('imdbID')}")
-                    imdb_label.setStyleSheet("color: #555;")
-                    imdb_layout.addWidget(imdb_label)
-                    imdb_layout.addStretch()
-                    info_layout.addLayout(imdb_layout)
+                if movie.get('Genre'):
+                    genre_label = QLabel(f"Жанр: {movie.get('Genre')}")
+                    genre_label.setStyleSheet("color: #555;")
+                    info_layout.addWidget(genre_label)
+
+                if movie.get('Runtime'):
+                    runtime_label = QLabel(f"Продолжительность: {movie.get('Runtime')}")
+                    runtime_label.setStyleSheet("color: #555;")
+                    info_layout.addWidget(runtime_label)
+
+                if movie.get('Director'):
+                    director_label = QLabel(f"Режиссёр: {movie.get('Director')}")
+                    director_label.setStyleSheet("color: #555;")
+                    info_layout.addWidget(director_label)
+
+                if movie.get('Actors'):
+                    actors_label = QLabel(f"Актёры: {movie.get('Actors')}")
+                    actors_label.setWordWrap(True)
+                    actors_label.setStyleSheet("color: #555;")
+                    info_layout.addWidget(actors_label)
+
+                if movie.get('Plot'):
+                    plot_label = QLabel(f"Описание: {movie.get('Plot')}")
+                    plot_label.setWordWrap(True)
+                    plot_label.setStyleSheet("color: #555;")
+                    plot_label.setMaximumHeight(100)
+                    info_layout.addWidget(plot_label)
 
                 if movie.get('imdbRating') and movie.get('imdbRating') != 'N/A':
-                    rating_layout = QHBoxLayout()
-                    rating_label = QLabel(f"Рейтинг: {movie.get('imdbRating')}")
+                    rating_label = QLabel(f"Рейтинг IMDb: {movie.get('imdbRating')}")
                     rating_label.setStyleSheet("color: #ffc107; font-weight: bold;")
-                    rating_layout.addWidget(rating_label)
-                    rating_layout.addStretch()
-                    info_layout.addLayout(rating_layout)
+                    info_layout.addWidget(rating_label)
 
                 separator = QFrame()
                 separator.setFrameShape(QFrame.Shape.HLine)
