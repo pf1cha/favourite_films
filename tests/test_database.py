@@ -34,13 +34,11 @@ def test_get_all_favorites_by_user_id(mock_session, sample_favourite):
 
     assert favorites == [sample_favourite]
 
-    # Получаем аргументы, с которыми вызывался execute
     called_args = mock_session.execute.call_args[0][0]
 
-    # Проверяем, что это SELECT и есть фильтрация по user_id
     assert str(called_args).startswith("SELECT")
     assert "favourites.user_id" in str(called_args)
-    assert "1" in str(called_args)  # Проверяем, что user_id=1
+    assert "1" in str(called_args)
 
 
 def test_remove_favorite_success(mock_session):
@@ -50,10 +48,7 @@ def test_remove_favorite_success(mock_session):
 
     assert success is True
 
-    # Получаем переданный delete-запрос
     called_delete = mock_session.execute.call_args[0][0]
-
-    # Проверяем что это корректный DELETE для FavouriteFilm
     assert str(called_delete).startswith("DELETE")
     assert called_delete.whereclause.compare(
         (FavouriteFilm.user_id == 1) &
