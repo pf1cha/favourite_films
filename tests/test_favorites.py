@@ -32,7 +32,6 @@ def sample_favorite():
     )
 
 
-@pytest.mark.integration
 def test_scenario_successful_favorite_addition(mock_db_session, sample_favorite):
     """Сценарий 1: Успешное добавление фильма в избранное"""
     mock_db_session.commit.return_value = None
@@ -45,7 +44,6 @@ def test_scenario_successful_favorite_addition(mock_db_session, sample_favorite)
     mock_db_session.commit.assert_called_once()
 
 
-@pytest.mark.integration
 def test_scenario_duplicate_favorite_addition(mock_db_session, sample_favorite):
     """Сценарий 2: Попытка добавить дубликат фильма"""
 
@@ -59,7 +57,6 @@ def test_scenario_duplicate_favorite_addition(mock_db_session, sample_favorite):
 
 
 
-@pytest.mark.integration
 def test_scenario_successful_favorite_removal(mock_db_session):
     """Сценарий 4: Успешное удаление фильма из избранного"""
     mock_db_session.commit.return_value = None
@@ -77,7 +74,6 @@ def test_scenario_successful_favorite_removal(mock_db_session):
     assert "public.favourites.user_id = :user_id_1" in delete_query
     assert "public.favourites.imdb_id = :imdb_id_1" in delete_query
 
-@pytest.mark.integration
 def test_scenario_remove_nonexistent_favorite(mock_db_session):
     """Сценарий 5: Удаление несуществующего фильма"""
     mock_db_session.execute.return_value.rowcount = 0
@@ -88,7 +84,6 @@ def test_scenario_remove_nonexistent_favorite(mock_db_session):
     mock_db_session.commit.assert_called_once()
 
 
-@pytest.mark.integration
 def test_scenario_database_error_during_removal(mock_db_session):
     """Сценарий 6: Ошибка БД при удалении фильма"""
     mock_db_session.commit.side_effect = Exception("Database error")
