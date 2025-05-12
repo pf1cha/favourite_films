@@ -4,7 +4,6 @@ from backend.models.favourite_film import FavouriteFilm
 
 
 def test_add_favorite_success(mock_session, sample_favourite):
-    # Успешное добавление
     mock_session.commit.return_value = None
     success, message = add_favorite(sample_favourite)
 
@@ -15,7 +14,6 @@ def test_add_favorite_success(mock_session, sample_favourite):
 
 
 def test_add_favorite_failure(mock_session, sample_favourite):
-    # Ошибка при добавлении
     mock_session.commit.side_effect = Exception("DB error")
     success, message = add_favorite(sample_favourite)
 
@@ -41,7 +39,6 @@ def test_get_all_favorites_by_user_id(mock_session, sample_favourite):
 
 
 def test_remove_favorite_success(mock_session):
-    # Успешное удаление
     mock_session.commit.return_value = None
     success = remove_favorite(1, "tt0133093")
 
@@ -58,7 +55,6 @@ def test_remove_favorite_success(mock_session):
 
 
 def test_remove_favorite_failure(mock_session):
-    # Ошибка при удалении
     mock_session.commit.side_effect = Exception("DB error")
     success = remove_favorite(1, "tt0133093")
 

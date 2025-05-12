@@ -55,7 +55,7 @@ def test_empty_fields_validation(window, qtbot):
             qtbot.mouseClick(window.login_button, Qt.MouseButton.LeftButton)
 
             assert window.login_status_label.text() == expected_msg
-            mock_login.assert_not_called()  # Бэкенд не должен вызываться
+            mock_login.assert_not_called()
 
 
 def test_tab_switching(window, qtbot):
@@ -82,7 +82,7 @@ def test_enter_key_submission(window, qtbot):
     qtbot.keyClicks(window.username_login_input, "test_user")
     qtbot.keyClicks(window.password_login_input, "testPass")
 
-    with patch('frontend.login_window.login_user') as mock_login:  # Измененный путь
+    with patch('frontend.login_window.login_user') as mock_login:
         mock_login.return_value = (True, "Вход выполнен успешно.", 123)
 
         qtbot.keyPress(window.password_login_input, Qt.Key.Key_Return)

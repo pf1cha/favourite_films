@@ -6,7 +6,6 @@ from backend.database.auth import hash_password, verify_password, register_user,
 from backend.models.user import User
 
 
-# hash_password tests
 @patch('backend.database.auth.bcrypt.gensalt')
 @patch('backend.database.auth.bcrypt.hashpw')
 def test_hash_password(mock_hashpw, mock_gensalt):
@@ -23,7 +22,6 @@ def test_hash_password(mock_hashpw, mock_gensalt):
     mock_hashpw.assert_called_once_with(password_to_hash.encode('utf-8'), mock_salt)
 
 
-# verify_password tests
 @patch('backend.database.auth.bcrypt.checkpw')
 def test_verify_password_correct(mock_checkpw):
     mock_checkpw.return_value = True
@@ -56,7 +54,6 @@ def test_verify_password_generic_exception(mock_checkpw, capsys):
     assert "Ошибка при проверке пароля: Some bcrypt error" in captured.err
 
 
-# register_user tests (mock_session fixture is used implicitly)
 
 @patch('backend.database.auth.hash_password', return_value=b'hashed_pw_bytes_utf8')
 def test_register_user_success(mock_hash_password_func, mock_session):
@@ -132,7 +129,6 @@ def test_register_user_unexpected_error(mock_hash_password_func, mock_session, c
     assert "Неожиданная ошибка при регистрации unexpected_user" in captured.err
 
 
-# login_user tests
 
 def test_login_user_success(mock_session, sample_user):
     mock_session.execute.return_value.scalar_one_or_none.return_value = sample_user

@@ -6,7 +6,6 @@ from backend.api.omdb_client import get_movie_by_id, search_movie_by_title
 OMDB_BASE_URL = "http://www.omdbapi.com/"
 
 
-# Tests for get_movie_by_id
 
 @patch('backend.api.omdb_client.requests.get')
 @patch('backend.api.omdb_client.OMDB_API_KEY', 'test_key')
@@ -95,7 +94,6 @@ def test_get_movie_by_id_unexpected_exception(mock_requests_get, capsys):
     assert "Неожиданная ошибка при получении деталей tt12345: Unexpected error" in captured.err
 
 
-# Tests for search_movie_by_title
 
 @patch('backend.api.omdb_client.time.sleep')
 @patch('backend.api.omdb_client.get_movie_by_id')
