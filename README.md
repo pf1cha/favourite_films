@@ -230,8 +230,231 @@
 
 ### Контракты API
 
+#### 1. OMDb API
 
+##### Базовый URL
+`http://www.omdbapi.com/`
 
+##### Обязательные параметры
+- `apikey` — API ключ для доступа к сервису
+- `i` — IMDb ID фильма (для запроса по ID)
+- `s` — Название фильма (для поиска)
+
+#### Методы
+
+#### 1.1. Поиск фильма по ID
+**Эндпоинт:** `GET /`  
+**Параметры:**
+- `i` — IMDb ID фильма (обязательный)
+- `plot` — Детализация описания (`short` или `full`)
+
+**Пример запроса:**
+```http
+GET /?apikey=ваш_ключ&i=tt1234567&plot=short
+```
+
+**Пример успешного ответа:**
+```json
+{
+  "Title": "Inception",
+  "Year": "2010",
+  "Rated": "PG-13",
+  "Released": "16 Jul 2010",
+  "Runtime": "148 min",
+  "Genre": "Action, Adventure, Sci-Fi",
+  "Director": "Christopher Nolan",
+  "Writer": "Christopher Nolan",
+  "Actors": "Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page",
+  "Plot": "A thief who steals corporate secrets...",
+  "Language": "English, Japanese, French",
+  "Country": "United States, United Kingdom",
+  "Awards": "Won 4 Oscars. 157 wins & 220 nominations total",
+  "Poster": "https://m.media-amazon.com/images/M/...jpg",
+  "Metascore": "74",
+  "imdbRating": "8.8",
+  "imdbVotes": "2,396,929",
+  "imdbID": "tt1375666",
+  "Type": "movie",
+  "DVD": "07 Dec 2010",
+  "BoxOffice": "$292,576,195",
+  "Production": "N/A",
+  "Website": "N/A",
+  "Response": "True"
+}
+```
+
+#### 1.2. Поиск фильмов по названию
+**Эндпоинт:** `GET /`  
+**Параметры:**
+- `s` — Название для поиска (обязательный)
+- `y` — Год выпуска
+- `type` — Тип контента (`movie`, `series`, `episode`)
+- `page` — Номер страницы (пагинация)
+
+**Пример запроса:**
+```http
+GET /?apikey=ваш_ключ&s=Inception&type=movie&page=1
+```
+
+**Пример успешного ответа:**
+```json
+{
+  "Search": [
+    {
+      "Title": "Inception",
+      "Year": "2010",
+      "imdbID": "tt1375666",
+      "Type": "movie",
+      "Poster": "https://m.media-amazon.com/images/M/...jpg"
+    }
+  ],
+  "totalResults": "1",
+  "Response": "True"
+}
+```
+
+#### 2. Внутреннее API приложения
+
+##### Базовый URL
+`/api/`
+
+#### 2.1. Аутентификация
+
+##### Регистрация пользователя
+**Эндпоинт:** `POST /auth/register`  
+**Тело запроса:**
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
+
+**Успешный ответ:**
+```json
+{
+  "success": true,
+  "message": "Пользователь успешно зарегистрирован"
+}
+```
+
+**Ошибки:**
+- 400: Неверные данные (пустые поля или пароль < 6 символов)
+- 409: Пользователь уже существует
+- 500: Ошибка сервера
+
+##### Авторизация пользователя
+**Эндпоинт:** `POST /auth/login`  
+**Тело запроса:**
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
+
+**Успешный ответ:**
+```json
+{
+  "success": true,
+  "message": "Вход выполнен успешно",
+  "user_id": 1
+}
+```
+
+**Ошибки:**
+- 400: Неверные данные
+- 401: Неверные учетные данные
+- 500: Ошибка сервера
+
+#### 2.2. Работа с избранным
+
+##### Добавление в избранное
+**Эндпоинт:** `POST /favorites`  
+**Тело запроса:**
+```json
+{
+  "user_id": 1,
+  "imdb_id": "string",
+  "title": "string",
+  "year": "string",
+  "type": "string",
+  "poster_url": "string"
+}
+```
+
+**Успешный ответ:**
+```json
+{
+  "success": true,
+  "message": "Успешно добавлено в избранное"
+}
+```
+
+##### Получение списка избранного
+**Эндпоинт:** `GET /favorites/{user_id}`  
+**Успешный ответ:**
+```json
+[
+  {
+    "id": 1,
+    "title": "Inception",
+    "year": "2010",
+    "imdb_id": "tt1375666",
+    "type": "movie",
+    "poster_url": "http://example.com/poster.jpg",
+    "added_at": "2023-01-01T00:00:00"
+  }
+]
+```
+
+##### Удаление из избранного
+**Эндпоинт:** `DELETE /favorites/{user_id}/{imdb_id}`  
+**Успешный ответ:**
+```json
+{
+  "success": true
+}
+```
+
+#### 2.3. Работа с отзывами
+
+##### Добавление/обновление отзыва
+**Эндпоинт:** `POST /reviews`  
+**Тело запроса:**
+```json
+{
+  "user_id": 1,
+  "imdb_id": "string",
+  "movie_title": "string",
+  "rating": 5,
+  "comment": "string"
+}
+```
+
+**Успешный ответ:**
+```json
+{
+  "success": true,
+  "message": "Отзыв успешно добавлен"
+}
+```
+
+##### Получение отзывов пользователя
+**Эндпоинт:** `GET /reviews/user/{user_id}`  
+**Успешный ответ:**
+```json
+[
+  {
+    "id": 1,
+    "imdb_id": "tt1375666",
+    "movie_title": "Inception",
+    "rating": 5,
+    "comment": "Отличный фильм!",
+    "created_at": "2023-01-01T00:00:00"
+  }
+]
+```
 
 ### Нефункциональные требования
 
