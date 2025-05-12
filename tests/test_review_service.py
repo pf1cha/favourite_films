@@ -102,7 +102,6 @@ def test_add_review_unexpected_error(mock_session, sample_user, capsys):
     assert f"Unexpected error adding/updating review (user: {sample_user.id}, imdb: ttFatal): Very Unexpected Error" in captured.err
 
 
-# get_reviews_for_movie tests
 def test_get_reviews_for_movie_success(mock_session, sample_review):
     mock_query_result = MagicMock()
     mock_query_result.filter.return_value.order_by.return_value.all.return_value = [sample_review, sample_review]
@@ -139,7 +138,6 @@ def test_get_reviews_for_movie_exception(mock_session, capsys):
     assert "Error fetching reviews for movie (imdb: tt_problem_child): DB Query Failed Miserably" in captured.err
 
 
-# get_reviews_by_user tests
 def test_get_reviews_by_user_success(mock_session, sample_user, sample_review):
     mock_query_result = MagicMock()
     mock_query_result.filter.return_value.order_by.return_value.all.return_value = [sample_review]
@@ -172,7 +170,6 @@ def test_get_reviews_by_user_exception(mock_session, sample_user, capsys):
     assert f"Error fetching reviews for user (user_id: {sample_user.id}): User Reviews Query Fail" in captured.err
 
 
-# get_review_by_user_and_movie tests
 def test_get_review_by_user_and_movie_found(mock_session, sample_user, sample_review):
     mock_query_result = MagicMock()
     mock_query_result.filter_by.return_value.first.return_value = sample_review
