@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:15
@@ -31,10 +29,13 @@ services:
       DB_PASSWORD: 1234
       DB_HOST: db
       DB_PORT: 5432
+      # X11 forwarding
+      DISPLAY: ${DISPLAY}  # Pass host DISPLAY variable
+      QT_QPA_PLATFORM: xcb
     volumes:
       - .:/app
+      - /tmp/.X11-unix:/tmp/.X11-unix  # Share X11 socket
     working_dir: /app
-    command: sh -c "alembic upgrade head && python main.py"
     restart: unless-stopped
 
 volumes:
