@@ -5,7 +5,6 @@ from backend.models.favourite_film import FavouriteFilm
 
 
 def test_add_favorite_success(mock_session, sample_favourite):
-    # Успешное добавление
     mock_session.commit.return_value = None
     success, message = add_favorite(sample_favourite)
 
@@ -16,7 +15,6 @@ def test_add_favorite_success(mock_session, sample_favourite):
 
 
 def test_add_favorite_failure(mock_session, sample_favourite):
-    # Ошибка при добавлении
     mock_session.commit.side_effect = Exception("DB error")
     success, message = add_favorite(sample_favourite)
 
@@ -34,26 +32,20 @@ def test_get_all_favorites_by_user_id(mock_session, sample_favourite):
 
     assert favorites == [sample_favourite]
 
-    # Получаем аргументы, с которыми вызывался execute
     called_args = mock_session.execute.call_args[0][0]
 
-    # Проверяем, что это SELECT и есть фильтрация по user_id
     assert str(called_args).startswith("SELECT")
     assert "favourites.user_id" in str(called_args)
-    assert "1" in str(called_args)  # Проверяем, что user_id=1
+    assert "1" in str(called_args)
 
 
 def test_remove_favorite_success(mock_session):
-    # Успешное удаление
     mock_session.commit.return_value = None
     success = remove_favorite(1, "tt0133093")
 
     assert success is True
 
-    # Получаем переданный delete-запрос
     called_delete = mock_session.execute.call_args[0][0]
-
-    # Проверяем что это корректный DELETE для FavouriteFilm
     assert str(called_delete).startswith("DELETE")
     assert called_delete.whereclause.compare(
         (FavouriteFilm.user_id == 1) &
@@ -64,7 +56,6 @@ def test_remove_favorite_success(mock_session):
 
 
 def test_remove_favorite_failure(mock_session):
-    # Ошибка при удалении
     mock_session.commit.side_effect = Exception("DB error")
     success = remove_favorite(1, "tt0133093")
 
