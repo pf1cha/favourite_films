@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: favourite_films
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d favourite_films"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: movie_app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_NAME: favourite_films
+      DB_USER: postgres
+      DB_PASSWORD: 1234
+      DB_HOST: db
+      DB_PORT: 5432
+      # X11 forwarding
+      DISPLAY: ${DISPLAY}  # Pass host DISPLAY variable
+      QT_QPA_PLATFORM: xcb
+    volumes:
+      - .:/app
+      - /tmp/.X11-unix:/tmp/.X11-unix  # Share X11 socket
+    working_dir: /app
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

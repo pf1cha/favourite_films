@@ -1,5 +1,6 @@
 from unittest.mock import MagicMock
 from backend.database.database import add_favorite, get_all_favorites_by_user_id, remove_favorite
+from sqlalchemy import select, delete
 from backend.models.favourite_film import FavouriteFilm
 
 
