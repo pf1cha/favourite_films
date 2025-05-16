@@ -3,7 +3,6 @@ FROM ubuntu:22.04
 # Install Python and system dependencies
 RUN apt-get update && apt-get install -y \
     python3-pip \
-    python3-pyqt6 \
     libxcb-xinerama0 \
     libxcb-randr0 \
     libxcb-xfixes0 \
@@ -17,9 +16,7 @@ RUN apt-get update && apt-get install -y \
     libegl1 \
     libfontconfig1 \
     libdbus-1-3 \
-    # X11 and virtual framebuffer
     xvfb \
-    # Fonts
     fonts-dejavu \
     && rm -rf /var/lib/apt/lists/*
 
