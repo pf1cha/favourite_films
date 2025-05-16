@@ -36,7 +36,6 @@ services:
       - .:/app
       - /tmp/.X11-unix:/tmp/.X11-unix  # Share X11 socket
     working_dir: /app
-    restart: unless-stopped
 
 volumes:
   postgres_data:
