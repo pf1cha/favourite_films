@@ -29,12 +29,11 @@ services:
       DB_PASSWORD: 1234
       DB_HOST: db
       DB_PORT: 5432
-      # X11 forwarding
-      DISPLAY: ${DISPLAY}  # Pass host DISPLAY variable
+      DISPLAY: ${DISPLAY}
       QT_QPA_PLATFORM: xcb
     volumes:
       - .:/app
-      - /tmp/.X11-unix:/tmp/.X11-unix  # Share X11 socket
+      - /tmp/.X11-unix:/tmp/.X11-unix
     working_dir: /app
 
 volumes:

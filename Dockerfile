@@ -1,6 +1,5 @@
 FROM ubuntu:22.04
 
-# Install Python and system dependencies
 RUN apt-get update && apt-get install -y \
     python3-pip \
     libxkbcommon-x11-0 \
@@ -22,9 +21,7 @@ RUN apt-get update && apt-get install -y \
     libegl1 \
     libfontconfig1 \
     libdbus-1-3 \
-    # X11 and virtual framebuffer
     xvfb \
-    # Fonts
     fonts-liberation \
     fonts-dejavu \
     && rm -rf /var/lib/apt/lists/*
@@ -36,13 +33,11 @@ ENV DISPLAY=:99
 
 WORKDIR /app
 
-# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Entrypoint script to handle Xvfb and app launch
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
