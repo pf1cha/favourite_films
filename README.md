@@ -682,3 +682,28 @@ pytest tests/integration
 
 ## Установка и запуск
 
+Для того, чтобы установить и запустить приложение, система должна удовлетворять требованиям:
+наличие Docker Engine, Docker Compose, Git и X11 (сетевой протокол, необходимый для контейнера, чтобы выводить окно приложения)
+
+1. Клонировать репозиторий
+```bash
+git clone https://github.com/pf1cha/favourite_films.git
+```
+
+2. Перейти в директорию проекта
+```bash
+cd favourite_films
+```
+
+3. Дать контейнеру доступ к X11
+```bash
+xhost +local:docker
+```
+
+4. Заполнить необходимыми данными файл config.env (лежит в корне проекта) и переместить его в директорию `backend/config`
+
+
+5. Запустить Docker Compose
+```bash
+sudo docker compose up --abort-on-container-exit
+```
